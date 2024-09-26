@@ -1,7 +1,7 @@
 # Copyright 2023 Manna Harbour
 # https://github.com/manna-harbour/miryoku
 
-outboard_repository=BruiserT/brain-zmk-config
+outboard_repository=iamDrakkir/zmk-config
 outboard_ref=main
 outboard_from=config/boards/shields/brain
 outboard_to=boards/shields/brain
