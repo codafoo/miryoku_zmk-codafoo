@@ -58,62 +58,10 @@ jobs:
       board: '["nice_nano_v2"]'
       shield: '["settings_reset"]'
 
-  # Flake with nice_nano_v2
-  flake-nice-left:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["nice_nano_v2"]'
-      shield: '["flake_left"]'
-  flake-nice-right:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["nice_nano_v2"]'
-      shield: '["flake_right"]'
-  flake-nice-reset:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["nice_nano_v2"]'
-      shield: '["settings_reset"]'
-
-  # Flake with seeed_xiao_ble
-  flake-xiao-left:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["seeed_xiao_ble"]'
-      shield: '["flake_left"]'
-  flake-xiao-right:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["seeed_xiao_ble"]'
-      shield: '["flake_right"]'
-  flake-xiao-reset:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["seeed_xiao_ble"]'
-      shield: '["settings_reset"]'
-
-  # roBa with seeeduino_xiao_ble and automouse
-  roBa-left:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["seeeduino_xiao_ble"]'
-      shield: '["roBa_L"]'
-  roBa-right:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["seeeduino_xiao_ble"]'
-      shield: '["roBa_R"]'
-  roBa-reset:
-    uses: ./.github/workflows/main.yml
-    secrets: inherit
-    with:
-      board: '["seeeduino_xiao_ble"]'
-      shield: '["settings_reset"]'
+  # Note: The following keyboards are disabled pending shield definitions:
+  # - ergonaut_one (shield not in upstream ZMK)
+  # - flake (shield not in upstream ZMK)
+  # - roBa (outboard config not working properly)
+  #
+  # To enable these keyboards, shield definitions need to be added to upstream ZMK
+  # or proper outboard configurations need to be created.
