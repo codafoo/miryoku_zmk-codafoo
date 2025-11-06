@@ -8,9 +8,9 @@
         compatible = "zmk,combos";
         combo_tab {
             timeout-ms = <50>;
-            key-positions = <23 24>;  // D + Z keys
+            key-positions = <23 24>;  // D + Z keys (for Nightingale layout)
             bindings = <&kp TAB>;
-            layers = <0 1 2 10>;      // BASE, EXTRA, TAP, ALT layers
+            layers = <1>;             // EXTRA layer (Nightingale) only
         };
     };
 };
