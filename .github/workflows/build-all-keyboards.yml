@@ -31,18 +31,57 @@ jobs:
       board: '["nice_nano_v2"]'
       shield: '["urchin_right nice_view_adapter nice_view"]'
 
-  # Settings Reset (works for all boards)
-  settings-reset:
+  # Ergonaut One (seeeduino_xiao_ble)
+  ergonaut-one-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["ergonaut_one_left"]'
+  ergonaut-one-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["ergonaut_one_right"]'
+
+  # Ergonaut One S (nice_nano_v2)
+  ergonaut-one-s:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["ergonaut_one_s"]'
+
+  # roBa (seeeduino_xiao_ble)
+  roBa-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["roBa_L"]'
+  roBa-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["roBa_R"]'
+
+  # Settings Reset (for nice_nano_v2 boards)
+  settings-reset-nice-nano:
     uses: ./.github/workflows/main.yml
     secrets: inherit
     with:
       board: '["nice_nano_v2"]'
       shield: '["settings_reset"]'
 
-  # Note: The following keyboards are disabled pending shield definitions:
-  # - ergonaut_one (shield not in upstream ZMK)
-  # - flake (shield not in upstream ZMK)
-  # - roBa (outboard config not working properly)
-  #
-  # To enable these keyboards, shield definitions need to be added to upstream ZMK
-  # or proper outboard configurations need to be created.
+  # Settings Reset (for seeeduino_xiao_ble boards)
+  settings-reset-xiao:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["settings_reset"]'
+
+  # Note: The following keyboards are disabled pending proper configuration:
+  # - flake (no build configuration available)
