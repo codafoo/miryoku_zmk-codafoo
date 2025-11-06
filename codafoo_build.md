@@ -221,6 +221,7 @@ For 36-key layouts add 2 keys, for 42-key add 8 keys, etc.
 | **Flake** | nice_nano_v2, seeed_xiao_ble | none | `flake_left`, `flake_right` |
 | **Ergonaut One** | nice_nano_v2 | none | `ergonaut_one` |
 | **Ergonaut One S** | nice_nano_v2 | none | `ergonaut_one_s` |
+| **roBa** | seeeduino_xiao_ble | none | `roBa_L`, `roBa_R` (with PMW3610 trackball & automouse) |
 
 ### Adding a New Keyboard
 
@@ -340,12 +341,28 @@ miryoku_zmk-codafoo/
 └── README.md
 ```
 
+## ZMK Studio
+
+All keyboards are configured with ZMK Studio enabled for real-time keymap editing:
+
+- **Access Studio**: Connect keyboard via USB or Bluetooth
+- **Studio URL**: https://zmk.studio/
+- **Features**:
+  - Live keymap editing without reflashing
+  - Layer configuration
+  - Behavior customization
+  - No locking by default (CONFIG_ZMK_STUDIO_LOCKING=n)
+
+**Note**: ZMK Studio is experimental. Stable firmware editing via GitHub Actions is still recommended.
+
 ## Resources
 
 - **Miryoku Documentation**: https://github.com/manna-harbour/miryoku
 - **ZMK Documentation**: https://zmk.dev/
+- **ZMK Studio**: https://zmk.studio/
 - **ZMK Discord**: https://zmk.dev/community/discord/invite
 - **Miryoku Reference**: https://github.com/manna-harbour/miryoku/tree/master/docs/reference
+- **roBa Setup Guide**: See `roBa_setup.md` for trackball keyboard with automouse
 
 ## Contributing
 

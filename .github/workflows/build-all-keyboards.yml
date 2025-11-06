@@ -97,3 +97,23 @@ jobs:
     with:
       board: '["seeed_xiao_ble"]'
       shield: '["settings_reset"]'
+
+  # roBa with seeeduino_xiao_ble and automouse
+  roBa-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["roBa_L"]'
+  roBa-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["roBa_R"]'
+  roBa-reset:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["settings_reset"]'
