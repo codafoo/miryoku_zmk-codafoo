@@ -4,40 +4,18 @@ The roBa is a 50-key split ergonomic keyboard with an integrated PMW3610 trackba
 
 ## Prerequisites
 
-To build firmware for the roBa keyboard, you need to add the shield definition files from the original repository.
+**Good news!** The roBa shield files are automatically pulled from the original repository during the build process via the outboard system. No manual setup required!
 
-## Setup Steps
+## How It Works
 
-### 1. Add roBa Shield Files
+The build system automatically:
+1. Clones the shield definitions from `kumamuk-git/zmk-config-roBa`
+2. Extracts the shield files during compilation
+3. Links them into the build directory
 
-The roBa shield definitions need to be added to your repository:
+This is configured in `.github/workflows/outboards/shields/roBa`.
 
-```bash
-# Create shields directory structure
-mkdir -p boards/shields/roBa
-
-# Clone the original roBa repository (temporary)
-git clone https://github.com/kumamuk-git/zmk-config-roBa.git /tmp/roBa-temp
-
-# Copy shield files
-cp -r /tmp/roBa-temp/boards/shields/roBa/* boards/shields/roBa/
-
-# Clean up
-rm -rf /tmp/roBa-temp
-```
-
-**Or manually download these files from https://github.com/kumamuk-git/zmk-config-roBa/tree/main/boards/shields/roBa:**
-
-- `Kconfig.defconfig`
-- `Kconfig.shield`
-- `roBa.dtsi`
-- `roBa.zmk.yml`
-- `roBa_L.conf`
-- `roBa_L.overlay`
-- `roBa_R.conf`
-- `roBa_R.overlay`
-
-### 2. Verify Configuration Files
+## Configuration Files
 
 The following configuration files are already set up in this repository:
 
@@ -230,12 +208,22 @@ CONFIG_PMW3610_MOVEMENT_THRESHOLD=0    # Minimum movement to register
 - **ZMK Automouse**: https://zmk.dev/docs/features/automouse
 - **PMW3610 Sensor**: https://zmk.dev/docs/hardware/pointing/pmw3610
 
-## Building Without Shield Files
+## Manual Shield Installation (Optional)
 
-If you haven't added the shield files yet, the build will fail with:
+If you want to work with the shield files locally, you can manually add them:
 
+```bash
+# Create shields directory structure
+mkdir -p boards/shields/roBa
+
+# Clone the original roBa repository (temporary)
+git clone https://github.com/kumamuk-git/zmk-config-roBa.git /tmp/roBa-temp
+
+# Copy shield files
+cp -r /tmp/roBa-temp/boards/shields/roBa/* boards/shields/roBa/
+
+# Clean up
+rm -rf /tmp/roBa-temp
 ```
-error: SHIELD roBa_L not found
-```
 
-Follow the [Setup Steps](#setup-steps) above to add the required files.
+**Note:** This is optional. GitHub Actions builds automatically fetch the shields.

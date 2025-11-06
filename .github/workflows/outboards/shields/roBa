@@ -1,0 +1,7 @@
+# Copyright 2023 Manna Harbour
+# https://github.com/manna-harbour/miryoku
+
+outboard_repository=kumamuk-git/zmk-config-roBa
+outboard_ref=main
+outboard_from=boards/shields/roBa
+outboard_to=boards/shields/roBa
