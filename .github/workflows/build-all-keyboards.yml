@@ -1,0 +1,99 @@
+# Copyright 2022 Manna Harbour
+# https://github.com/manna-harbour/miryoku
+
+name: 'Build All Keyboards'
+on: workflow_dispatch
+jobs:
+  # Corne
+  corne-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["corne_left nice_view_adapter nice_view"]'
+  corne-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["corne_right nice_view_adapter nice_view"]'
+  corne-reset:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["settings_reset"]'
+
+  # Ergonaut One
+  ergonaut-one:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["ergonaut_one"]'
+  ergonaut-one-reset:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["settings_reset"]'
+
+  # Urchin
+  urchin-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["urchin_left nice_view_adapter nice_view"]'
+  urchin-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["urchin_right nice_view_adapter nice_view"]'
+  urchin-reset:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["settings_reset"]'
+
+  # Flake with nice_nano_v2
+  flake-nice-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["flake_left"]'
+  flake-nice-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["flake_right"]'
+  flake-nice-reset:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["nice_nano_v2"]'
+      shield: '["settings_reset"]'
+
+  # Flake with seeed_xiao_ble
+  flake-xiao-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeed_xiao_ble"]'
+      shield: '["flake_left"]'
+  flake-xiao-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeed_xiao_ble"]'
+      shield: '["flake_right"]'
+  flake-xiao-reset:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeed_xiao_ble"]'
+      shield: '["settings_reset"]'
