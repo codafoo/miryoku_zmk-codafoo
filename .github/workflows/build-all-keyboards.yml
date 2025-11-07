@@ -103,6 +103,16 @@ jobs:
       board: '["seeeduino_xiao_ble"]'
       shield: '["anywhy_flake_right"]'
 
-  # Note: roBa is excluded from build-all due to lack of ZMK module
-  # - roBa requires a ZMK module but only has a config repository
-  # - Use build-roBa.yml individually once a module is available
+  # roBa (seeeduino_xiao_ble - with PMW3610 trackball)
+  roBa-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["roBa_left"]'
+  roBa-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["roBa_right"]'

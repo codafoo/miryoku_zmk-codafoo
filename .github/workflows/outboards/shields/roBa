@@ -1,7 +1,5 @@
 # Copyright 2023 Manna Harbour
 # https://github.com/manna-harbour/miryoku
 
-outboard_repository=kumamuk-git/zmk-config-roBa
-outboard_ref=main
-outboard_from=boards/shields/roBa
-outboard_to=boards/shields/roBa
+# Use this repository as ZMK module for roBa shields
+outboard_modules=codafoo/miryoku_zmk-codafoo/main
