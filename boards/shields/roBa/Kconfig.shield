@@ -1,5 +1,0 @@
-config SHIELD_ROBA_RIGHT
-    def_bool $(shields_list_contains,roBa_right)
-
-config SHIELD_ROBA_LEFT
-    def_bool $(shields_list_contains,roBa_left)
