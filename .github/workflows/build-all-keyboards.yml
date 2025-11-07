@@ -45,18 +45,18 @@ jobs:
       board: '["seeeduino_xiao_ble"]'
       shield: '["ergonaut_one_right"]'
 
-  # Ergonaut One S (nice_nano_v2)
+  # Ergonaut One S (seeeduino_xiao_ble)
   ergonaut-one-s-left:
     uses: ./.github/workflows/main.yml
     secrets: inherit
     with:
-      board: '["nice_nano_v2"]'
+      board: '["seeeduino_xiao_ble"]'
       shield: '["ergonaut_one_s_left"]'
   ergonaut-one-s-right:
     uses: ./.github/workflows/main.yml
     secrets: inherit
     with:
-      board: '["nice_nano_v2"]'
+      board: '["seeeduino_xiao_ble"]'
       shield: '["ergonaut_one_s_right"]'
 
   # Flake (nice_nano_v2)
