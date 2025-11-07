@@ -75,18 +75,32 @@ jobs:
       board: '["seeeduino_xiao_ble"]'
       shield: '["settings_reset"]'
 
-  # Flake (nice_nano_v2 only - uses Pro Micro pinout)
-  flake-left:
+  # Flake (nice_nano_v2 - uses v1.0 with pro_micro connector)
+  flake-nicenano-left:
     uses: ./.github/workflows/main.yml
     secrets: inherit
     with:
       board: '["nice_nano_v2"]'
       shield: '["anywhy_flake_left"]'
-  flake-right:
+  flake-nicenano-right:
     uses: ./.github/workflows/main.yml
     secrets: inherit
     with:
       board: '["nice_nano_v2"]'
+      shield: '["anywhy_flake_right"]'
+
+  # Flake (seeeduino_xiao_ble - uses main branch with xiao_d connector)
+  flake-xiao-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["anywhy_flake_left"]'
+  flake-xiao-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
       shield: '["anywhy_flake_right"]'
 
   # Note: roBa is excluded from build-all due to lack of ZMK module

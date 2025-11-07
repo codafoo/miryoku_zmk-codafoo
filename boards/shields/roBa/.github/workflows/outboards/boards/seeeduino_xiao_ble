@@ -1,0 +1,5 @@
+# Copyright 2023 Manna Harbour
+# https://github.com/manna-harbour/miryoku
+
+# Override flake module for xiao - use main branch which has xiao_d connector
+outboard_modules=anywhy-io/flake-zmk-module/main
