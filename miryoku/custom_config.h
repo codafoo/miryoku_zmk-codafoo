@@ -42,6 +42,10 @@
 #define MIRYOKU_TAP_GALLIUM        // TAP layer (full functionality like BASE)
 #define MIRYOKU_ALT_QWERTY         // ALT layer
 
+// Explicitly override layers to ensure full functionality (home row mods + layer taps):
+#define MIRYOKU_LAYER_TAP MIRYOKU_ALTERNATIVES_BASE_GALLIUM      // TAP uses BASE Gallium
+#define MIRYOKU_LAYER_ALT MIRYOKU_ALTERNATIVES_BASE_QWERTY       // ALT uses BASE QWERTY
+
 // Toggle key positions on utility layers (NAV/NUM/SYM/FUN/MOUSE/MEDIA):
 // [5:ALT] [6:BASE] [7:EXTRA] [8:TAP] [9:BOOT]
 // All 4 layers are now equal - any can be used as your main layout!
