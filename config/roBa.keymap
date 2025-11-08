@@ -1,7 +1,47 @@
 // Copyright 2023 Manna Harbour
 // https://github.com/manna-harbour/miryoku
 
+// roBa has 3 left thumb keys (no combo needed) and 2 right thumb keys (combo for 3rd)
+// The mapping file handles the combo configuration
+
 #include "../miryoku/custom_config.h"
-#include "../miryoku/mapping/50/kyria.h"
+#include "../miryoku/mapping/43/roba.h"
 #include "../miryoku/miryoku.dtsi"
 #include "../miryoku/custom_combos.dtsi"
+
+// Custom TRACKBALL and SCROLL layers for roBa keyboard
+// TRACKBALL layer (11) is activated by automouse when the trackball moves
+// SCROLL layer (12) is activated when holding U_TO_SCROLL key on TRACKBALL layer
+/ {
+    behaviors {
+        u_to_U_SCROLL: u_to_U_SCROLL {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            flavor = "hold-preferred";
+            bindings = <&mo 12>, <&kp K_COPY>;
+        };
+    };
+
+    keymap {
+        TRACKBALL {
+            display-name = "Trackball";
+            bindings = <
+U_BOOT             &u_to_U_TAP        &u_to_U_EXTRA      &u_to_U_BASE       &u_to_U_ALT                   U_RDO              U_PST              &u_to_U_SCROLL     U_CPY              U_UND
+&kp LGUI           &kp LALT           &kp LCTRL          &kp LSHFT          U_NA                          U_NU               U_BTN1             U_BTN3             U_BTN2             U_NU
+U_NA               &kp RALT           &u_to_U_SYM        &u_to_U_MOUSE      U_NA                          U_NU               U_WH_L             U_WH_D             U_WH_U             U_WH_R
+U_NP               U_NP               U_NA               U_NA               U_NA                          U_BTN2             U_BTN1             U_BTN3             U_NP               U_NP
+            >;
+        };
+
+        SCROLL {
+            display-name = "Scroll";
+            bindings = <
+U_BOOT             &u_to_U_TAP        &u_to_U_EXTRA      &u_to_U_BASE       &u_to_U_ALT                   U_RDO              U_PST              &trans             U_CPY              U_UND
+&kp LGUI           &kp LALT           &kp LCTRL          &kp LSHFT          U_NA                          U_NU               U_NU               U_NU               U_NU               U_NU
+U_NA               &kp RALT           &u_to_U_SYM        &u_to_U_MOUSE      U_NA                          U_NU               U_NU               U_NU               U_NU               U_NU
+U_NP               U_NP               U_NA               U_NA               U_NA                          U_BTN2             U_BTN1             U_BTN3             U_NP               U_NP
+            >;
+        };
+    };
+};
