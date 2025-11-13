@@ -2,6 +2,6 @@
 // https://github.com/manna-harbour/miryoku
 
 #include "../miryoku/custom_config.h"
-#include "../miryoku/mapping/50/kyria.h"
+#include "../miryoku/mapping/43/roBa.h"
 #include "../miryoku/miryoku.dtsi"
 #include "../miryoku/custom_combos.dtsi"

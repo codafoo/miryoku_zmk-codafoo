@@ -1,6 +1,6 @@
 # roBa Keyboard Setup Guide
 
-The roBa is a 50-key split ergonomic keyboard with an integrated PMW3610 trackball on the right side and automouse functionality.
+The roBa is a 43-key split ergonomic keyboard with an integrated PMW3610 trackball on the right side and automouse functionality.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ This is configured in `.github/workflows/outboards/shields/roBa`.
 
 The following configuration files are already set up in this repository:
 
-- **config/roBa.keymap** - Uses Kyria 50-key Miryoku mapping with custom combos
+- **config/roBa.keymap** - Uses custom 43-key roBa Miryoku mapping with custom combos
 - **config/roBa_R.conf** - Right side configuration with automouse enabled
 - **config/roBa_L.conf** - Left side configuration
 
@@ -39,7 +39,7 @@ gh workflow run build-all-keyboards.yml --ref main
 
 | Feature | Details |
 |---------|---------|
-| **Keys** | 50 total (25 per side) |
+| **Keys** | 43 total (variable per side) |
 | **Controller** | Seeeduino XIAO BLE (both sides) |
 | **Sensor** | PMW3610 optical sensor (right side) |
 | **Extras** | Rotary encoder support |
