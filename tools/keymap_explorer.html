@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZMK Miryoku Keymap Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1e1e2e;
+            --bg-secondary: #2a2a3a;
+            --bg-tertiary: #363649;
+            --text-primary: #cdd6f4;
+            --text-secondary: #a6adc8;
+            --text-muted: #6c7086;
+            --accent: #89b4fa;
+            --accent-hover: #74c7ec;
+            --border: #45475a;
+            --key-bg: #313244;
+            --key-hover: #45475a;
+            --key-active: #585b70;
+            --key-modifier: #f38ba8;
+            --key-layer: #89dceb;
+            --key-special: #a6e3a1;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .control-section {
+            margin-bottom: 20px;
+        }
+
+        .control-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(137, 180, 250, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: var(--key-hover);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .keyboard-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .keyboard-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(137, 180, 250, 0.2);
+        }
+
+        .info-panel {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            background: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .info-item-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-item-value {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .keyboard-display {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px var(--shadow);
+            overflow-x: auto;
+        }
+
+        .miryoku-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: fit-content;
+            margin: 0 auto;
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .keyboard-half {
+            display: flex;
+            gap: 10px;
+        }
+
+        .keyboard-spacer {
+            width: 40px;
+        }
+
+        .key {
+            min-width: 60px;
+            height: 60px;
+            background: var(--key-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 8px;
+            position: relative;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .key:hover {
+            background: var(--key-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .key.empty {
+            background: transparent;
+            border: 2px dashed var(--border);
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .key.empty:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .key.modifier {
+            border-color: var(--key-modifier);
+            background: rgba(243, 139, 168, 0.1);
+        }
+
+        .key.layer-key {
+            border-color: var(--key-layer);
+            background: rgba(137, 220, 235, 0.1);
+        }
+
+        .key.special {
+            border-color: var(--key-special);
+            background: rgba(166, 227, 161, 0.1);
+        }
+
+        .key-main {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .key-sub {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            text-align: center;
+        }
+
+        .key-position {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .thumb-cluster {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .legend {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .legend-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 2px solid var(--border);
+        }
+
+        .legend-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tools-panel {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .tools-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .tool-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            padding: 12px 24px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .tool-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .comparison-view {
+            display: none;
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .comparison-view.active {
+            display: block;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+        }
+
+        .comparison-item {
+            background: var(--bg-tertiary);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .comparison-title {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--key-hover);
+        }
+
+        .key-info {
+            background: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .key-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .key-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .key-info-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .key-info-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .key {
+                min-width: 45px;
+                height: 45px;
+                font-size: 0.8rem;
+            }
+
+            .keyboard-display {
+                padding: 20px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .error {
+            background: rgba(243, 139, 168, 0.2);
+            border: 2px solid var(--key-modifier);
+            padding: 20px;
+            border-radius: 8px;
+            color: var(--text-primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎹 ZMK Miryoku Keymap Explorer</h1>
+            <p class="subtitle">Interactive visualization and exploration tool for your ZMK keyboard configurations</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-section">
+                <label class="control-label">🔍 Search Keyboards</label>
+                <input type="text" id="keyboardSearch" class="search-box" placeholder="Type to search keyboards...">
+            </div>
+
+            <div class="control-section">
+                <label class="control-label">⌨️ Select Keyboard</label>
+                <select id="keyboardSelect" class="keyboard-select">
+                    <option value="">Loading keyboards...</option>
+                </select>
+            </div>
+
+            <div class="control-section">
+                <label class="control-label">📊 Select Layer</label>
+                <div class="button-group" id="layerButtons"></div>
+            </div>
+        </div>
+
+        <div id="infoPanel" class="info-panel" style="display: none;">
+            <div class="info-grid" id="infoGrid"></div>
+        </div>
+
+        <div class="tools-panel">
+            <h3 class="tools-title">🛠️ Tools</h3>
+            <div class="tool-buttons">
+                <button class="tool-btn" onclick="toggleComparison()">Compare Layers</button>
+                <button class="tool-btn" onclick="exportConfig()">Export Configuration</button>
+                <button class="tool-btn" onclick="showStats()">View Statistics</button>
+                <button class="tool-btn" onclick="printLayout()">Print Layout</button>
+            </div>
+        </div>
+
+        <div id="comparisonView" class="comparison-view">
+            <h3 class="comparison-title">Layer Comparison</h3>
+            <div class="comparison-grid" id="comparisonGrid"></div>
+        </div>
+
+        <div class="legend">
+            <h3 class="legend-title">Key Legend</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--key-bg); border-color: var(--border);"></div>
+                    <span class="legend-label">Standard Key</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: rgba(243, 139, 168, 0.1); border-color: var(--key-modifier);"></div>
+                    <span class="legend-label">Modifier (Shift, Ctrl, Alt, GUI)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: rgba(137, 220, 235, 0.1); border-color: var(--key-layer);"></div>
+                    <span class="legend-label">Layer Toggle/Hold</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: rgba(166, 227, 161, 0.1); border-color: var(--key-special);"></div>
+                    <span class="legend-label">Special Function</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="keyboardDisplay" class="keyboard-display">
+            <div class="loading">Select a keyboard to view its layout...</div>
+        </div>
+    </div>
+
+    <div id="keyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Key Information</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="keyModalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let keymapData = null;
+        let currentKeyboard = null;
+        let currentLayer = 'BASE';
+        let comparisonMode = false;
+
+        // Load keymap data
+        async function loadKeymapData() {
+            try {
+                const response = await fetch('keymap_data.json');
+                keymapData = await response.json();
+                initializeUI();
+            } catch (error) {
+                console.error('Error loading keymap data:', error);
+                document.getElementById('keyboardDisplay').innerHTML =
+                    '<div class="error">Error loading keymap data. Please ensure keymap_data.json is available.</div>';
+            }
+        }
+
+        function initializeUI() {
+            populateKeyboardSelect();
+            createLayerButtons();
+
+            // Add event listeners
+            document.getElementById('keyboardSelect').addEventListener('change', function() {
+                selectKeyboard(this.value);
+            });
+
+            document.getElementById('keyboardSearch').addEventListener('input', function() {
+                filterKeyboards(this.value);
+            });
+
+            // Select first keyboard by default
+            if (keymapData.keyboards.length > 0) {
+                selectKeyboard(keymapData.keyboards[0].name);
+            }
+        }
+
+        function populateKeyboardSelect() {
+            const select = document.getElementById('keyboardSelect');
+            select.innerHTML = '<option value="">-- Select a Keyboard --</option>';
+
+            keymapData.keyboards.forEach(kb => {
+                const option = document.createElement('option');
+                option.value = kb.name;
+                option.textContent = `${kb.name} (${kb.key_count} keys)`;
+                select.appendChild(option);
+            });
+        }
+
+        function filterKeyboards(searchTerm) {
+            const select = document.getElementById('keyboardSelect');
+            const options = select.querySelectorAll('option');
+
+            options.forEach(option => {
+                if (option.value === '') return;
+                const matches = option.textContent.toLowerCase().includes(searchTerm.toLowerCase());
+                option.style.display = matches ? '' : 'none';
+            });
+        }
+
+        function createLayerButtons() {
+            const container = document.getElementById('layerButtons');
+            container.innerHTML = '';
+
+            keymapData.miryoku_layers.forEach(layer => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.textContent = layer.name;
+                btn.dataset.layer = layer.id;
+                btn.onclick = () => selectLayer(layer.id);
+
+                if (layer.id === currentLayer) {
+                    btn.classList.add('active');
+                }
+
+                container.appendChild(btn);
+            });
+        }
+
+        function selectKeyboard(keyboardName) {
+            currentKeyboard = keymapData.keyboards.find(kb => kb.name === keyboardName);
+
+            if (!currentKeyboard) return;
+
+            document.getElementById('keyboardSelect').value = keyboardName;
+            updateInfoPanel();
+            renderKeyboard();
+        }
+
+        function selectLayer(layerId) {
+            currentLayer = layerId;
+
+            // Update button states
+            document.querySelectorAll('#layerButtons .btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.layer === layerId);
+            });
+
+            renderKeyboard();
+        }
+
+        function updateInfoPanel() {
+            const panel = document.getElementById('infoPanel');
+            const grid = document.getElementById('infoGrid');
+
+            if (!currentKeyboard) {
+                panel.style.display = 'none';
+                return;
+            }
+
+            panel.style.display = 'block';
+
+            const config = currentKeyboard.custom_config;
+
+            grid.innerHTML = `
+                <div class="info-item">
+                    <div class="info-item-label">Keyboard</div>
+                    <div class="info-item-value">${currentKeyboard.name}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-label">Total Keys</div>
+                    <div class="info-item-value">${currentKeyboard.key_count}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-label">Base Layout</div>
+                    <div class="info-item-value">${config.base}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-label">Extra Layout</div>
+                    <div class="info-item-value">${config.extra || 'None'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-label">Tap Layout</div>
+                    <div class="info-item-value">${config.tap || 'None'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-item-label">Alt Layout</div>
+                    <div class="info-item-value">${config.alt || 'None'}</div>
+                </div>
+            `;
+        }
+
+        function renderKeyboard() {
+            const display = document.getElementById('keyboardDisplay');
+
+            if (!currentKeyboard) {
+                display.innerHTML = '<div class="loading">Select a keyboard to view its layout...</div>';
+                return;
+            }
+
+            const layer = currentKeyboard.layers.find(l => l.id === currentLayer);
+            if (!layer) {
+                display.innerHTML = '<div class="error">Layer not found</div>';
+                return;
+            }
+
+            const keys = layer.keys;
+
+            // Render Miryoku standard layout (3x5 + 3 thumb keys per side)
+            let html = '<div class="miryoku-layout">';
+
+            // Top row
+            html += '<div class="keyboard-row">';
+            html += '<div class="keyboard-half">';
+            for (let i = 0; i < 5; i++) {
+                html += renderKey(keys[i], i, layer);
+            }
+            html += '</div>';
+            html += '<div class="keyboard-spacer"></div>';
+            html += '<div class="keyboard-half">';
+            for (let i = 5; i < 10; i++) {
+                html += renderKey(keys[i], i, layer);
+            }
+            html += '</div>';
+            html += '</div>';
+
+            // Middle row
+            html += '<div class="keyboard-row">';
+            html += '<div class="keyboard-half">';
+            for (let i = 10; i < 15; i++) {
+                html += renderKey(keys[i], i, layer);
+            }
+            html += '</div>';
+            html += '<div class="keyboard-spacer"></div>';
+            html += '<div class="keyboard-half">';
+            for (let i = 15; i < 20; i++) {
+                html += renderKey(keys[i], i, layer);
+            }
+            html += '</div>';
+            html += '</div>';
+
+            // Bottom row
+            html += '<div class="keyboard-row">';
+            html += '<div class="keyboard-half">';
+            for (let i = 20; i < 25; i++) {
+                html += renderKey(keys[i], i, layer);
+            }
+            html += '</div>';
+            html += '<div class="keyboard-spacer"></div>';
+            html += '<div class="keyboard-half">';
+            for (let i = 25; i < 30; i++) {
+                html += renderKey(keys[i], i, layer);
+            }
+            html += '</div>';
+            html += '</div>';
+
+            // Thumb cluster
+            html += '<div class="thumb-cluster">';
+            for (let i = 32; i < 38; i++) {
+                if (i === 35) {
+                    html += '<div class="keyboard-spacer"></div>';
+                }
+                html += renderKey(keys[i], i, layer);
+            }
+            html += '</div>';
+
+            html += '</div>';
+
+            display.innerHTML = html;
+        }
+
+        function renderKey(keyLabel, position, layer) {
+            if (!keyLabel || keyLabel === '') {
+                return `<div class="key empty"></div>`;
+            }
+
+            const keyClass = getKeyClass(keyLabel);
+            const displayLabel = formatKeyLabel(keyLabel);
+
+            return `
+                <div class="key ${keyClass}" onclick="showKeyInfo('${keyLabel}', ${position}, '${layer.name}')">
+                    <span class="key-position">${position}</span>
+                    <span class="key-main">${displayLabel}</span>
+                </div>
+            `;
+        }
+
+        function getKeyClass(keyLabel) {
+            const modifiers = ['LGUI', 'LALT', 'LCTRL', 'LSHFT', 'RGUI', 'RALT', 'RCTRL', 'RSHFT'];
+            const layerKeys = ['NAV', 'MOUSE', 'MEDIA', 'NUM', 'SYM', 'FUN', 'BUTTON'];
+            const special = ['BOOT', 'BT_', 'RGB_', 'BTN'];
+
+            if (modifiers.includes(keyLabel)) return 'modifier';
+
+            for (let layer of layerKeys) {
+                if (keyLabel === layer) return 'layer-key';
+            }
+
+            for (let sp of special) {
+                if (keyLabel.startsWith(sp)) return 'special';
+            }
+
+            return '';
+        }
+
+        function formatKeyLabel(keyLabel) {
+            // Shorten common labels for display
+            const shortLabels = {
+                'LSHFT': 'Shift',
+                'RSHFT': 'Shift',
+                'LCTRL': 'Ctrl',
+                'RCTRL': 'Ctrl',
+                'LALT': 'Alt',
+                'RALT': 'Alt',
+                'LGUI': 'GUI',
+                'RGUI': 'GUI',
+                'BSPC': 'Bksp',
+                'SPC': 'Space',
+                'ENT': 'Enter',
+                'ESC': 'Esc',
+                'DEL': 'Del',
+                'CAPS': 'Caps',
+                'PSCR': 'PrtSc',
+                'SLCK': 'ScrLk',
+                'PAUSE': 'Pause',
+                'INS': 'Ins',
+                'PGUP': 'PgUp',
+                'PGDN': 'PgDn'
+            };
+
+            return shortLabels[keyLabel] || keyLabel;
+        }
+
+        function showKeyInfo(keyLabel, position, layerName) {
+            const modal = document.getElementById('keyModal');
+            const content = document.getElementById('keyModalContent');
+
+            content.innerHTML = `
+                <div class="key-info">
+                    <div class="key-info-row">
+                        <span class="key-info-label">Key:</span>
+                        <span class="key-info-value">${keyLabel}</span>
+                    </div>
+                    <div class="key-info-row">
+                        <span class="key-info-label">Position:</span>
+                        <span class="key-info-value">${position}</span>
+                    </div>
+                    <div class="key-info-row">
+                        <span class="key-info-label">Layer:</span>
+                        <span class="key-info-value">${layerName}</span>
+                    </div>
+                    <div class="key-info-row">
+                        <span class="key-info-label">Type:</span>
+                        <span class="key-info-value">${getKeyType(keyLabel)}</span>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function getKeyType(keyLabel) {
+            const modifiers = ['LGUI', 'LALT', 'LCTRL', 'LSHFT', 'RGUI', 'RALT', 'RCTRL', 'RSHFT'];
+            if (modifiers.includes(keyLabel)) return 'Modifier';
+
+            const layerKeys = ['NAV', 'MOUSE', 'MEDIA', 'NUM', 'SYM', 'FUN', 'BUTTON'];
+            if (layerKeys.includes(keyLabel)) return 'Layer Key';
+
+            if (keyLabel.startsWith('F') && !isNaN(keyLabel.substring(1))) return 'Function Key';
+            if (keyLabel.startsWith('BT_')) return 'Bluetooth';
+            if (keyLabel.startsWith('RGB_')) return 'RGB Control';
+            if (keyLabel.startsWith('BTN')) return 'Mouse Button';
+            if (keyLabel.includes('MOUSE') || keyLabel.includes('WHEEL')) return 'Mouse';
+
+            return 'Standard Key';
+        }
+
+        function closeModal() {
+            document.getElementById('keyModal').classList.remove('active');
+        }
+
+        function toggleComparison() {
+            comparisonMode = !comparisonMode;
+            const view = document.getElementById('comparisonView');
+
+            if (comparisonMode) {
+                view.classList.add('active');
+                renderComparison();
+            } else {
+                view.classList.remove('active');
+            }
+        }
+
+        function renderComparison() {
+            const grid = document.getElementById('comparisonGrid');
+            grid.innerHTML = '';
+
+            if (!currentKeyboard) return;
+
+            // Compare BASE, EXTRA, TAP, and ALT layers
+            const layersToCompare = ['BASE', 'EXTRA', 'TAP', 'ALT'];
+
+            layersToCompare.forEach(layerId => {
+                const layer = currentKeyboard.layers.find(l => l.id === layerId);
+                if (!layer) return;
+
+                const item = document.createElement('div');
+                item.className = 'comparison-item';
+
+                let html = `<h4 style="color: var(--accent); margin-bottom: 15px;">${layer.name} - ${layer.layout || 'N/A'}</h4>`;
+                html += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
+
+                // Show only alpha keys (first 30)
+                for (let i = 0; i < 30; i++) {
+                    const key = layer.keys[i] || '';
+                    html += `<div style="
+                        min-width: 40px;
+                        height: 40px;
+                        background: var(--key-bg);
+                        border: 1px solid var(--border);
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                    ">${key || '·'}</div>`;
+                }
+
+                html += '</div>';
+                item.innerHTML = html;
+                grid.appendChild(item);
+            });
+        }
+
+        function exportConfig() {
+            if (!currentKeyboard) {
+                alert('Please select a keyboard first');
+                return;
+            }
+
+            const config = {
+                keyboard: currentKeyboard.name,
+                key_count: currentKeyboard.key_count,
+                layers: currentKeyboard.layers.map(layer => ({
+                    name: layer.name,
+                    layout: layer.layout,
+                    keys: layer.keys
+                })),
+                custom_config: currentKeyboard.custom_config
+            };
+
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentKeyboard.name}_config.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showStats() {
+            if (!currentKeyboard) {
+                alert('Please select a keyboard first');
+                return;
+            }
+
+            const layer = currentKeyboard.layers.find(l => l.id === currentLayer);
+            const keys = layer.keys;
+
+            const stats = {
+                total: keys.length,
+                used: keys.filter(k => k && k !== '').length,
+                empty: keys.filter(k => !k || k === '').length,
+                modifiers: keys.filter(k => ['LGUI', 'LALT', 'LCTRL', 'LSHFT', 'RGUI', 'RALT', 'RCTRL', 'RSHFT'].includes(k)).length,
+                layers: keys.filter(k => ['NAV', 'MOUSE', 'MEDIA', 'NUM', 'SYM', 'FUN', 'BUTTON'].includes(k)).length
+            };
+
+            const modal = document.getElementById('keyModal');
+            const content = document.getElementById('keyModalContent');
+
+            content.innerHTML = `
+                <h4 style="color: var(--accent); margin-bottom: 20px;">Layer Statistics: ${layer.name}</h4>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.total}</div>
+                        <div class="stat-label">Total Keys</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.used}</div>
+                        <div class="stat-label">Used</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.empty}</div>
+                        <div class="stat-label">Empty</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.modifiers}</div>
+                        <div class="stat-label">Modifiers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${stats.layers}</div>
+                        <div class="stat-label">Layer Keys</div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function printLayout() {
+            window.print();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('keyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Load data on page load
+        loadKeymapData();
+    </script>
+</body>
+</html>
