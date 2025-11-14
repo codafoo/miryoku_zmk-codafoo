@@ -1,0 +1,316 @@
+version: '3'
+
+vars:
+  KEYBOARDS: brain roBa ergonaut_one_s ergonaut_one
+
+tasks:
+  # Keymap visualization tasks
+  keymap:
+    desc: "Generate keymap SVG for a specific keyboard"
+    summary: |
+      Generate keymap visualization SVG for a keyboard.
+      Usage: task keymap KEYBOARD=<name> [THEME=<theme>]
+      Example: task keymap KEYBOARD=brain
+      Example: task keymap KEYBOARD=brain THEME=nord
+
+      Available themes: light (default), dark, auto, nord, catppuccin-mocha
+    cmds:
+      - |
+        if [ -z "{{.KEYBOARD}}" ]; then
+          echo "Error: KEYBOARD variable is required"
+          echo "Usage: task keymap KEYBOARD=<name> [THEME=<theme>]"
+          echo "Available keyboards: {{.KEYBOARDS}}"
+          echo "Available themes: light (default), dark, auto, nord, catppuccin-mocha"
+          exit 1
+        fi
+
+        # Set theme config
+        THEME_ARG=""
+        if [ -n "{{.THEME}}" ]; then
+          if [ "{{.THEME}}" != "light" ]; then
+            if [ -f "themes/{{.THEME}}.yaml" ]; then
+              THEME_ARG="-c themes/{{.THEME}}.yaml"
+              echo "Using theme: {{.THEME}}"
+            else
+              echo "Warning: Theme '{{.THEME}}' not found, using default light theme"
+            fi
+          fi
+        fi
+
+        echo "Generating keymap for {{.KEYBOARD}}..."
+        keymap parse -c 10 -z config/{{.KEYBOARD}}.keymap > {{.KEYBOARD}}_keymap.yaml
+
+        # Generate SVG based on keyboard type
+        case "{{.KEYBOARD}}" in
+          brain)
+            if [ -n "$THEME_ARG" ]; then
+              keymap $THEME_ARG draw {{.KEYBOARD}}_keymap.yaml -d boards/shields/brain/brain.dtsi -l brain_physical_layout > {{.KEYBOARD}}_keymap.svg
+            else
+              keymap draw {{.KEYBOARD}}_keymap.yaml -d boards/shields/brain/brain.dtsi -l brain_physical_layout > {{.KEYBOARD}}_keymap.svg
+            fi
+            ;;
+          roBa)
+            if [ -n "$THEME_ARG" ]; then
+              keymap $THEME_ARG draw {{.KEYBOARD}}_keymap.yaml -d boards/shields/roBa/roBa.dtsi -l roba_physical_layout > {{.KEYBOARD}}_keymap.svg
+            else
+              keymap draw {{.KEYBOARD}}_keymap.yaml -d boards/shields/roBa/roBa.dtsi -l roba_physical_layout > {{.KEYBOARD}}_keymap.svg
+            fi
+            ;;
+          ergonaut_one_s|ergonaut_one)
+            # Ergonaut uses standard ortho layout
+            sed -i '' 's/layout: {zmk_keyboard: {{.KEYBOARD}}}/layout: {ortho_layout: {split: true, rows: 3, columns: 5, thumbs: 3}}/' {{.KEYBOARD}}_keymap.yaml
+            if [ -n "$THEME_ARG" ]; then
+              keymap $THEME_ARG draw {{.KEYBOARD}}_keymap.yaml > {{.KEYBOARD}}_keymap.svg
+            else
+              keymap draw {{.KEYBOARD}}_keymap.yaml > {{.KEYBOARD}}_keymap.svg
+            fi
+            ;;
+          *)
+            echo "Unknown keyboard: {{.KEYBOARD}}"
+            echo "Attempting to generate with default settings..."
+            if [ -n "$THEME_ARG" ]; then
+              keymap $THEME_ARG draw {{.KEYBOARD}}_keymap.yaml > {{.KEYBOARD}}_keymap.svg
+            else
+              keymap draw {{.KEYBOARD}}_keymap.yaml > {{.KEYBOARD}}_keymap.svg
+            fi
+            ;;
+        esac
+        THEME_NAME="${THEME:-light}"
+        echo "✓ Generated {{.KEYBOARD}}_keymap.svg with $THEME_NAME theme ($(ls -lh {{.KEYBOARD}}_keymap.svg | awk '{print $5}'))"
+
+  keymap:all:
+    desc: "Generate keymap SVGs for all keyboards"
+    summary: |
+      Generate keymap visualizations for all configured keyboards.
+      This will create SVG files for: {{.KEYBOARDS}}
+    cmds:
+      - for: { var: KEYBOARDS, split: ' ' }
+        task: keymap
+        vars:
+          KEYBOARD: "{{.ITEM}}"
+
+  # Firmware build tasks
+  build:
+    desc: "Build firmware for a specific keyboard"
+    summary: |
+      Build ZMK firmware for a keyboard.
+      Usage: task build KEYBOARD=<name>
+      Example: task build KEYBOARD=brain
+
+      The firmware will be built via GitHub Actions.
+      Use 'task build:local KEYBOARD=<name>' for local builds.
+    cmds:
+      - |
+        if [ -z "{{.KEYBOARD}}" ]; then
+          echo "Error: KEYBOARD variable is required"
+          echo "Usage: task build KEYBOARD=<name>"
+          echo "Available keyboards: {{.KEYBOARDS}}"
+          exit 1
+        fi
+        echo "Triggering build for {{.KEYBOARD}} via GitHub Actions..."
+        git add -A
+        git commit -m "Build {{.KEYBOARD}} firmware" || echo "No changes to commit"
+        git push
+        echo "✓ Build triggered. Check GitHub Actions for progress."
+
+  build:local:
+    desc: "Build firmware locally for a specific keyboard"
+    summary: |
+      Build ZMK firmware locally using Docker.
+      Usage: task build:local KEYBOARD=<name>
+      Example: task build:local KEYBOARD=brain
+
+      Requires Docker to be installed and running.
+    cmds:
+      - |
+        if [ -z "{{.KEYBOARD}}" ]; then
+          echo "Error: KEYBOARD variable is required"
+          echo "Usage: task build:local KEYBOARD=<name>"
+          echo "Available keyboards: {{.KEYBOARDS}}"
+          exit 1
+        fi
+        echo "Building {{.KEYBOARD}} locally..."
+        if [ ! -f "build.yaml" ]; then
+          echo "Error: build.yaml not found"
+          exit 1
+        fi
+        # Extract board and shield from build.yaml for this keyboard
+        echo "Note: Local builds require manual setup. See ZMK docs for details."
+        echo "Recommended: Use 'task build KEYBOARD={{.KEYBOARD}}' for GitHub Actions build instead."
+
+  build:all:
+    desc: "Trigger firmware builds for all keyboards"
+    summary: |
+      Trigger firmware builds for all keyboards via GitHub Actions.
+      This will commit and push changes, triggering CI builds.
+    cmds:
+      - |
+        echo "Triggering builds for all keyboards..."
+        git add -A
+        git commit -m "Build firmware for all keyboards" || echo "No changes to commit"
+        git push
+        echo "✓ Builds triggered. Check GitHub Actions for progress."
+
+  # Build status tasks
+  build:status:
+    desc: "Check build status for latest GitHub Actions run"
+    summary: |
+      Check the status of the most recent GitHub Actions workflow run.
+    cmds:
+      - gh run list --limit 5
+
+  build:watch:
+    desc: "Watch the latest GitHub Actions build"
+    summary: |
+      Watch the progress of the most recent GitHub Actions workflow run.
+    cmds:
+      - gh run watch
+
+  build:view:
+    desc: "View details of a specific build run"
+    summary: |
+      View detailed information about a GitHub Actions run.
+      Usage: task build:view RUN_ID=<id>
+      Use 'task build:status' to get run IDs.
+    cmds:
+      - |
+        if [ -z "{{.RUN_ID}}" ]; then
+          echo "Error: RUN_ID variable is required"
+          echo "Usage: task build:view RUN_ID=<id>"
+          echo "Use 'task build:status' to list recent runs"
+          exit 1
+        fi
+        gh run view {{.RUN_ID}}
+
+  # Clean tasks
+  clean:
+    desc: "Clean generated files for a specific keyboard"
+    summary: |
+      Remove generated YAML and SVG files for a keyboard.
+      Usage: task clean KEYBOARD=<name>
+      Example: task clean KEYBOARD=brain
+    cmds:
+      - |
+        if [ -z "{{.KEYBOARD}}" ]; then
+          echo "Error: KEYBOARD variable is required"
+          echo "Usage: task clean KEYBOARD=<name>"
+          exit 1
+        fi
+        echo "Cleaning generated files for {{.KEYBOARD}}..."
+        rm -f {{.KEYBOARD}}_keymap.yaml {{.KEYBOARD}}_keymap.svg
+        echo "✓ Cleaned {{.KEYBOARD}} generated files"
+
+  clean:all:
+    desc: "Clean all generated keymap files"
+    summary: |
+      Remove all generated YAML and SVG files for all keyboards.
+    cmds:
+      - |
+        echo "Cleaning all generated keymap files..."
+        rm -f *_keymap.yaml *_keymap.svg
+        echo "✓ Cleaned all generated files"
+
+  # Setup tasks
+  setup:
+    desc: "Install required tools for keymap generation"
+    summary: |
+      Install keymap-drawer and other required Python tools.
+      Creates a virtual environment if it doesn't exist.
+    cmds:
+      - |
+        echo "Setting up keymap generation tools..."
+        if [ ! -d ".venv" ]; then
+          echo "Creating virtual environment..."
+          python3 -m venv .venv
+        fi
+        echo "Installing keymap-drawer..."
+        .venv/bin/pip install keymap-drawer
+        echo "✓ Setup complete. Tools installed in .venv/"
+
+  # List tasks
+  list:
+    desc: "List all available keyboards"
+    summary: |
+      Show all keyboards configured in this repository.
+    cmds:
+      - |
+        echo "Available keyboards:"
+        for kb in {{.KEYBOARDS}}; do
+          if [ -f "config/$kb.keymap" ]; then
+            echo "  ✓ $kb"
+          else
+            echo "  ✗ $kb (keymap not found)"
+          fi
+        done
+
+  themes:
+    desc: "List all available themes"
+    summary: |
+      Show all available keymap visualization themes.
+      Use with: task keymap KEYBOARD=<name> THEME=<theme>
+    cmds:
+      - |
+        echo "Available themes:"
+        echo ""
+        echo "  • light (default) - Light mode theme"
+        if [ -f "themes/dark.yaml" ]; then
+          echo "  • dark - Dark mode theme with Nord-inspired colors"
+        fi
+        if [ -f "themes/auto.yaml" ]; then
+          echo "  • auto - Auto-adaptive theme (respects system preference)"
+        fi
+        if [ -f "themes/nord.yaml" ]; then
+          echo "  • nord - Nord color scheme"
+        fi
+        if [ -f "themes/catppuccin-mocha.yaml" ]; then
+          echo "  • catppuccin-mocha - Catppuccin Mocha color scheme"
+        fi
+        echo ""
+        echo "Usage examples:"
+        echo "  task keymap KEYBOARD=brain THEME=nord"
+        echo "  task keymap KEYBOARD=roBa THEME=catppuccin-mocha"
+
+  # Help task
+  help:
+    desc: "Show detailed help and examples"
+    summary: |
+      Display help information with usage examples.
+    cmds:
+      - |
+        cat <<'EOF'
+        ZMK Miryoku Taskfile - Help
+        ===========================
+
+        KEYMAP VISUALIZATION:
+          task keymap KEYBOARD=brain                    # Generate SVG (light theme)
+          task keymap KEYBOARD=brain THEME=nord         # Generate with Nord theme
+          task keymap KEYBOARD=roBa THEME=dark          # Generate with dark theme
+          task keymap:all                               # Generate SVGs for all keyboards
+          task themes                                   # List available themes
+
+        FIRMWARE BUILDS:
+          task build KEYBOARD=brain           # Build brain firmware (GitHub Actions)
+          task build:all                      # Build firmware for all keyboards
+          task build:status                   # Check recent build status
+          task build:watch                    # Watch latest build progress
+
+        CLEANING:
+          task clean KEYBOARD=brain           # Clean brain generated files
+          task clean:all                      # Clean all generated files
+
+        SETUP:
+          task setup                          # Install keymap-drawer tools
+          task list                           # List all available keyboards
+
+        AVAILABLE KEYBOARDS:
+          {{.KEYBOARDS}}
+
+        For more info on a specific task:
+          task --summary <task-name>
+        EOF
+
+  # Default task
+  default:
+    desc: "Show help information"
+    cmds:
+      - task: help

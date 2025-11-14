@@ -1,0 +1,43 @@
+# Catppuccin Mocha theme with smaller, more compact text
+draw_config:
+  dark_mode: true
+  # Reduce font sizes for all legend types
+  glyph_tap_size: 11      # default: 14
+  glyph_hold_size: 9      # default: 12
+  glyph_shifted_size: 8   # default: 10
+
+  svg_extra_style: |
+    /* Catppuccin Mocha palette */
+    svg.keymap {
+      background-color: #1e1e2e;
+    }
+    text {
+      fill: #cdd6f4;
+      font-size: 11px;  /* Smaller base font */
+    }
+    rect.key {
+      fill: #313244;
+      stroke: #45475a;
+    }
+    rect.combo {
+      fill: #45475a;
+      stroke: #585b70;
+    }
+    /* Smaller text for different legend types */
+    .tap text {
+      font-size: 11px;
+    }
+    .hold text {
+      fill: #89dceb;  /* Sky */
+      font-weight: 600;
+      font-size: 9px;
+    }
+    .shifted text {
+      fill: #cba6f7;  /* Mauve */
+      font-size: 8px;
+    }
+    .layer-activator {
+      fill: #a6e3a1;  /* Green */
+      font-weight: 700;
+      font-size: 9px;
+    }

@@ -1,0 +1,35 @@
+# Nord color scheme theme
+draw_config:
+  dark_mode: true
+  svg_extra_style: |
+    /* Nord color palette */
+    svg.keymap {
+      background-color: #2e3440;
+    }
+    text {
+      fill: #eceff4;
+    }
+    rect.key {
+      fill: #3b4252;
+      stroke: #4c566a;
+    }
+    rect.combo {
+      fill: #434c5e;
+      stroke: #4c566a;
+    }
+    /* Nord themed highlights */
+    .hold text {
+      fill: #88c0d0;  /* Nord Frost cyan */
+      font-weight: 600;
+    }
+    .shifted text {
+      fill: #b48ead;  /* Nord Aurora purple */
+    }
+    .layer-activator {
+      fill: #a3be8c;  /* Nord Aurora green */
+      font-weight: 700;
+    }
+    /* Home row mod styling */
+    .tap.hold text {
+      fill: #5e81ac;  /* Nord Frost blue */
+    }

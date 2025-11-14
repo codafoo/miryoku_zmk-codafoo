@@ -1,0 +1,77 @@
+# Catppuccin Mocha with clean, readable labels for Miryoku macros
+draw_config:
+  dark_mode: true
+
+  # Larger keys for better readability
+  key_w: 75.0
+  key_h: 68.0
+  split_gap: 35.0
+
+  # More aggressive text shrinking
+  shrink_wide_legends: 5
+
+  svg_extra_style: |
+    /* Catppuccin Mocha palette */
+    svg.keymap {
+      background-color: #1e1e2e;
+    }
+    text {
+      fill: #cdd6f4;
+      font-size: 11px;
+    }
+    rect.key {
+      fill: #313244;
+      stroke: #45475a;
+    }
+    rect.combo {
+      fill: #45475a;
+      stroke: #585b70;
+    }
+    .hold text {
+      fill: #89dceb;
+      font-weight: 600;
+      font-size: 9px;
+    }
+    .shifted text {
+      fill: #cba6f7;
+      font-size: 8px;
+    }
+    .layer-activator {
+      fill: #a6e3a1;
+      font-weight: 700;
+      font-size: 9px;
+    }
+    .tap.hold text {
+      fill: #89b4fa;
+    }
+
+parse_config:
+  # Map Miryoku layer switching macros to short names
+  raw_binding_map:
+    "&bootloader": "BOOT"
+    "&u_to_U_TAP": "TAP"
+    "&u_to_U_EXTRA": "EXTRA"
+    "&u_to_U_BASE": "BASE"
+    "&u_to_U_ALT": "ALT"
+    "&u_to_U_NAV": "NAV"
+    "&u_to_U_NUM": "NUM"
+    "&u_to_U_SYM": "SYM"
+    "&u_to_U_MOUSE": "MOUSE"
+    "&u_to_U_MEDIA": "MEDIA"
+    "&u_to_U_FUN": "FUN"
+    "&caps_word": "CAPS"
+    "&u_macro_u_bt_sel_0": "BT0"
+    "&u_macro_u_bt_sel_1": "BT1"
+    "&u_macro_u_bt_sel_2": "BT2"
+    "&u_macro_u_bt_sel_3": "BT3"
+    "&mmv MOVE_LEFT": "M←"
+    "&mmv MOVE_RIGHT": "M→"
+    "&mmv MOVE_UP": "M↑"
+    "&mmv MOVE_DOWN": "M↓"
+    "&msc SCRL_LEFT": "S←"
+    "&msc SCRL_RIGHT": "S→"
+    "&msc SCRL_UP": "S↑"
+    "&msc SCRL_DOWN": "S↓"
+    "&mkp MB1": "LMB"
+    "&mkp MB2": "RMB"
+    "&mkp MB3": "MMB"

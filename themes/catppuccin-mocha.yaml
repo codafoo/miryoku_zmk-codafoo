@@ -1,0 +1,34 @@
+# Catppuccin Mocha theme
+draw_config:
+  dark_mode: true
+  svg_extra_style: |
+    /* Catppuccin Mocha palette */
+    svg.keymap {
+      background-color: #1e1e2e;
+    }
+    text {
+      fill: #cdd6f4;
+    }
+    rect.key {
+      fill: #313244;
+      stroke: #45475a;
+    }
+    rect.combo {
+      fill: #45475a;
+      stroke: #585b70;
+    }
+    /* Catppuccin themed highlights */
+    .hold text {
+      fill: #89dceb;  /* Sky */
+      font-weight: 600;
+    }
+    .shifted text {
+      fill: #cba6f7;  /* Mauve */
+    }
+    .layer-activator {
+      fill: #a6e3a1;  /* Green */
+      font-weight: 700;
+    }
+    .tap.hold text {
+      fill: #89b4fa;  /* Blue */
+    }

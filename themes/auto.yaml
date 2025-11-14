@@ -1,0 +1,12 @@
+# Auto-adaptive theme (respects system/browser dark mode preference)
+draw_config:
+  dark_mode: auto
+  svg_extra_style: |
+    /* Customizations that work well in both modes */
+    .hold text {
+      font-weight: 600;
+    }
+    .layer-activator {
+      font-weight: 700;
+      text-decoration: underline;
+    }

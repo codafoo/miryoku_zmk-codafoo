@@ -64,7 +64,9 @@
 
             , <&key_physical_attrs 100 100  650  387 (-2000)   650   387>
             , <&key_physical_attrs 100 100  763  350 (-1000)     0   350>
-
+            // Ghost keys for keymap visualization (positioned off-screen)
+            , <&key_physical_attrs 100 100 2000  500       0     0     0>
+            , <&key_physical_attrs 100 100 2000  600       0     0     0>
             , <&key_physical_attrs 100 100 1200  337       0     0     0>
 
             ;
