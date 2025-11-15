@@ -142,14 +142,15 @@ tasks:
     desc: "Trigger firmware builds for all keyboards"
     summary: |
       Trigger firmware builds for all keyboards via GitHub Actions.
-      This will commit and push changes, triggering CI builds.
+      This will commit and push any changes, then manually trigger the workflow.
     cmds:
       - |
         echo "Triggering builds for all keyboards..."
         git add -A
         git commit -m "Build firmware for all keyboards" || echo "No changes to commit"
-        git push
-        echo "✓ Builds triggered. Check GitHub Actions for progress."
+        git push || echo "No changes to push"
+        gh workflow run build-all-keyboards.yml
+        echo "✓ Build workflow triggered. Check GitHub Actions for progress."
 
   # Build status tasks
   build:status:
