@@ -110,8 +110,9 @@ tasks:
         echo "Triggering build for {{.KEYBOARD}} via GitHub Actions..."
         git add -A
         git commit -m "Build {{.KEYBOARD}} firmware" || echo "No changes to commit"
-        git push
-        echo "✓ Build triggered. Check GitHub Actions for progress."
+        git push || echo "No changes to push"
+        gh workflow run build-{{.KEYBOARD}}.yml
+        echo "✓ Build workflow triggered. Check GitHub Actions for progress."
 
   build:local:
     desc: "Build firmware locally for a specific keyboard"
