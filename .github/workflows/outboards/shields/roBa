@@ -1,5 +1,5 @@
 # Copyright 2023 Manna Harbour
 # https://github.com/manna-harbour/miryoku
 
-# Use this repository as ZMK module for roBa shields, plus PMW3610 driver
-outboard_modules="codafoo/miryoku_zmk-codafoo/main kumamuk-git/zmk-pmw3610-driver/main"
+# Use this repository as ZMK module for roBa shields, plus badjeff's PMW3610 driver
+outboard_modules="codafoo/miryoku_zmk-codafoo/main badjeff/zmk-pmw3610-driver/main"
