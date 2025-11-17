@@ -52,13 +52,14 @@
 // Custom combo: Q + Z = TAB (useful for Nightingale layout on Extra layer)
 // Note: Combo needs to be added to keyboard keymaps after includes
 
-// Override NIGHTINGALE to use SPACE instead of R on second thumb key
-// This makes the Extra layer thumb keys consistent with Base layer
+// Override NIGHTINGALE thumb keys:
+// Left: ESC/MEDIA, R/NAV (original), TAB/MOUSE
+// Right: RET/SYM, SPACE/NUM, BSPC/FUN (DEL unmapped)
 #define MIRYOKU_ALTERNATIVES_BASE_NIGHTINGALE \
 &kp B,             &kp F,             &kp L,             &kp D,             &kp K,             &kp P,             &kp W,             &kp O,             &kp U,             &kp DOT,           \
 U_MT(LGUI, N),     U_MT(LALT, S),     U_MT(LCTRL, H),    U_MT(LSHFT, T),    &kp M,             &kp Y,             U_MT(LSHFT, C),    U_MT(LCTRL, A),    U_MT(LALT, E),     U_MT(LGUI, I),     \
 U_LT(U_BUTTON, X), U_MT(RALT, V),     &kp J,             &kp Q,             &kp Z,             &kp COMMA,         &kp G,             &kp SLASH,         U_MT(RALT, SEMI),  U_LT(U_BUTTON, SQT),\
-U_NP,              U_NP,              U_LT(U_MEDIA, ESC),U_LT(U_NAV, SPACE),U_LT(U_MOUSE, TAB),U_LT(U_SYM, RET),  U_LT(U_NUM, BSPC), U_LT(U_FUN, DEL),  U_NP,              U_NP
+U_NP,              U_NP,              U_LT(U_MEDIA, ESC),U_LT(U_NAV, R),    U_LT(U_MOUSE, TAB),U_LT(U_SYM, RET),  U_LT(U_NUM, SPACE),U_LT(U_FUN, BSPC), U_NP,              U_NP
 
 // Define CUSTOM QWERTY for ALT layer - explicitly with layer taps to ensure they work
 // This overrides any automatic selection to guarantee layer taps are present
