@@ -116,3 +116,17 @@ jobs:
     with:
       board: '["seeeduino_xiao_ble"]'
       shield: '["roBa_right"]'
+
+  # bykeeb (seeeduino_xiao_ble - fingerpunch)
+  bykeeb-left:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["bykeeb_left"]'
+  bykeeb-right:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+    with:
+      board: '["seeeduino_xiao_ble"]'
+      shield: '["bykeeb_right"]'

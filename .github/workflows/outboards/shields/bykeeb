@@ -1,0 +1,5 @@
+outboard_repository='sadekbaroudi/zmk-fingerpunch-keyboards'
+outboard_ref='main'
+outboard_from='boards/shields/bykeeb'
+outboard_to='boards/shields/bykeeb'
+outboard_modules='sadekbaroudi/zmk-fingerpunch-keyboards/main'
